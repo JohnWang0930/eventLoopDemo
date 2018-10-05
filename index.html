@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .outer{
+            background:gray;
+            position: absolute;
+            height: 50px;
+            width: 50px;
+            animation: move 2s ease-in;
+            animation-iteration-count :infinite;
+        }
+        .button1,.button2{
+            display: inline-block;
+            height: 50px;
+            background: red;
+        }
+        @keyframes move{
+            from{left:0;}
+            to{left:100%;}
+        }
+        .setTimeout{
+            margin-top:100px;
+        }
+        .setTimeout,.request{
+            background: green;
+            width:50px;
+            height: 50px;
+            position: relative;
+            left:0;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer"></div>
+    <div class="button1">事件阻塞</div>
+    <div class="button2">宏循环</div>
+    <div class="setTimeout"></div>
+    <div class="request"></div>
+    <script>
+        window.onload = function(){
+            document.querySelector('.button1').addEventListener('click',()=>{
+                while(true) {}
+            })
+            document.querySelector('.button2').addEventListener('click',()=>{
+                function a (){
+                    console.log('a')
+                    setTimeout(()=>{
+                        a()
+                    },0)
+                }
+                a()
+            })
+            function move (dom){
+                dom.style.left ? '' :  dom.style.left = '0px'
+                if (Number.parseInt(dom.style.left) >= document.body.clientWidth ){
+                    dom.style.left = '0px'
+                }else{
+                    dom.style.left = `${Number.parseInt(dom.style.left)+1}px`
+                }
+            }
+            function setTime(){
+                move(document.querySelector('.setTimeout'))
+                console.timeEnd()
+                setTimeout(setTime,0)
+            }
+            setTime()
+            console.time()
+            function request (){
+                move(document.querySelector('.request'))
+                requestAnimationFrame(()=>{
+                    request()
+                })
+            }
+            request()
+            
+        }
+    </script>
+</body>
+</html>
