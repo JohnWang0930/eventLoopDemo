@@ -55,29 +55,31 @@
                 }
                 a()
             })
-            function move (dom){
-                dom.style.left ? '' :  dom.style.left = '0px'
+            function move (dom){ //右移1px
+                dom.style.left = dom.style.left ||  '0px'
                 if (Number.parseInt(dom.style.left) >= document.body.clientWidth ){
                     dom.style.left = '0px'
                 }else{
                     dom.style.left = `${Number.parseInt(dom.style.left)+1}px`
                 }
             }
+
             function setTime(){
                 move(document.querySelector('.setTimeout'))
                 console.timeEnd()
+                console.time()
                 setTimeout(setTime,0)
             }
             setTime()
-            console.time()
-            function request (){
+
+            function request (){ //16.7毫秒执行一次
                 move(document.querySelector('.request'))
                 requestAnimationFrame(()=>{
                     request()
                 })
             }
             request()
-            
+
         }
     </script>
 </body>
